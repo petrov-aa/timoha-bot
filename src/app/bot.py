@@ -340,7 +340,7 @@ def send_help(message: TelebotMessage):
                      t("app.bot.message.start",
                        channel_title=channel.title,
                        channel_username=channel.username),
-                     parse_mode="Markdown")
+                     parse_mode="HTML")
 
 
 @bot.message_handler(commands=['cancel'])
