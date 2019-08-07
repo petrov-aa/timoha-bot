@@ -38,3 +38,8 @@ ENV_VAR_CHANNEL_ID = "APP_CHANNEL_ID"
 
 **Обазательная**: Если не задана, то бот не запускается
 """
+
+ENV_VAR_APP_RUN_METHOD = "APP_RUN_METHOD"
+"""
+Способ запуска бота: pooling или webhook
+"""

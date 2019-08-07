@@ -8,8 +8,9 @@
 `APP_DATABASE_URL` | Нет | Строка | `sqlite:///../data/db.db` |  URL-подключения к БД, который можно использовать с SQLAlchemy
 `APP_BOT_TOKEN` | Да | Строка | - | Токен бота
 `APP_BOT_ADMIN_ID` | Да | Число или Строка | - | Идентификатор или юзернейм канала в виде `@username`
-`APP_BOT_PROXY` | Нет | Строка | `None` | Прокси для бота. Например: `socks5h://user:pass@host:port`
 `APP_CHANNEL_ID` | Да | Число или Строка | - | Идентификатор или юзернейм канала в виде `@username`
+`APP_RUN_METHOD` | Да | Строка | - | Способ запуска бота: `pooling` или `webhook`. При использовании webhook бот будет слушать порт `443`
+`APP_BOT_PROXY` | Нет | Строка | `None` | Прокси для бота. Например: `socks5h://user:pass@host:port`
 
 # База данных
 

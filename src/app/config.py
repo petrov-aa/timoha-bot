@@ -39,3 +39,10 @@ APP_CHANNEL_ID = os.environ[ENV_VAR_CHANNEL_ID]
 """
 Идентификатор или юзернейм канала
 """
+
+if ENV_VAR_APP_RUN_METHOD not in os.environ:
+    raise Exception("Не задан способ запуска бота")
+APP_RUN_METHOD = os.environ[ENV_VAR_APP_RUN_METHOD]
+"""
+Способ запуска бота: pooling или webhook
+"""

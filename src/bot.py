@@ -1,19 +1,17 @@
-import os
-
 import telebot
 
 from aiohttp import web
-from app.bot import bot
+from app.bot import bot, config
 
 
 if __name__ == "__main__":
 
-    if os.environ['APP_RUN_METHOD'] == 'pooling':
+    if config.APP_RUN_METHOD == 'pooling':
 
         bot.remove_webhook()
         bot.polling(none_stop=True, timeout=9999)
 
-    elif os.environ['APP_RUN_METHOD'] == 'webhook':
+    elif config.APP_RUN_METHOD == 'webhook':
 
         app = web.Application()
 
