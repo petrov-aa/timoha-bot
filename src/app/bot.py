@@ -568,6 +568,7 @@ def call_on_admin_suggestion(call: CallbackQuery, session=None):
         rerender_suggestion(suggestion)
         # Отправляем сообщение о том, что ждем эмодзи
         suggested_emoji_set_markup = ReplyKeyboardMarkup()
+        # К сообщению прикрепляем последние 5 использованных уникальных наборов эмодзи
         previous_emoji_sets = repo.get_previous_emoji_sets()
         for emoji_set in previous_emoji_sets:
             suggested_emoji_set_markup.add(KeyboardButton(emoji_set))
@@ -576,7 +577,6 @@ def call_on_admin_suggestion(call: CallbackQuery, session=None):
                          reply_to_message_id=suggestion.admin_message_id,
                          reply_markup=suggested_emoji_set_markup if len(previous_emoji_sets) > 0 else None)
         suggestion.state = Suggestion.STATE_WAIT
-        # TODO прикрепить к сообщению последние 5 вариантов (не присылать при этом дубли)
 
 
 @bot.callback_query_handler(func=call_is_on_vote)
