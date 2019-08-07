@@ -6,7 +6,7 @@ from app.bot import bot, config
 
 if __name__ == "__main__":
 
-    if config.APP_RUN_METHOD == 'pooling':
+    if config.APP_RUN_METHOD == 'polling':
 
         bot.remove_webhook()
         bot.polling(none_stop=True, timeout=9999)

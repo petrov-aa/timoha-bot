@@ -3,6 +3,7 @@
 """
 
 import json
+from functools import reduce
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -212,3 +213,23 @@ def add_vote(poll_id: int, option_id: int, user_id: int, session: Session = None
     vote.option_id = option_id
     vote.user_id = user_id
     session.add(vote)
+
+
+@flush_session
+def get_previous_emoji_sets(session: Session = None) -> list:
+    """
+    Возвращает 5 последних использованных наборов эмодзи исключая дубли
+    :param session:
+    :return: Массив строк с набором эмодзи
+    """
+    pools = session.query(Poll).\
+        order_by(Poll.id.desc())\
+        .all()
+    unique = dict()
+    for pool in pools:
+        option_set = reduce(lambda acc, option: acc + option.text, pool.options, "")
+        if option_set not in unique:
+            unique[option_set] = True
+        if len(unique.keys()) >= 5:
+            break
+    return list(unique.keys())

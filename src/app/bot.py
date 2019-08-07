@@ -7,7 +7,7 @@ import logging
 
 from telebot import TeleBot, apihelper, logger
 from telebot.types import Message as TelebotMessage, Chat as TelebotChat, InlineKeyboardMarkup, InlineKeyboardButton, \
-    CallbackQuery
+    CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from app import config, repo, db, utils
 from app.messages import t
 
@@ -344,7 +344,8 @@ def send_help(message: TelebotMessage):
 
 
 @bot.message_handler(commands=['cancel'])
-def catch_cancel_command(message: TelebotMessage):
+@db.commit_session
+def catch_cancel_command(message: TelebotMessage, session=None):
     """
     Обработка команды Отмена (`\\\\cancel`)
 
@@ -369,7 +370,8 @@ def catch_cancel_command(message: TelebotMessage):
             raise Exception("Suggestion not found")
         repo.clear_admin_state()
         reset_suggestion(suggestion)
-        bot.send_message(admin_id, t("app.bot.admin.cancel"))
+        # Отправляем сообщение, что операция отменена и удаляем клавиатуру, если есть
+        bot.send_message(admin_id, t("app.bot.admin.cancel"), reply_markup=ReplyKeyboardRemove())
 
 
 @bot.message_handler(content_types=['text'])
@@ -403,10 +405,11 @@ def catch_text_message(message: TelebotMessage, session=None):
         poll.message_id = channel_post.message_id
         # Очищаем состояние админа
         repo.clear_admin_state()
-        # Отправляем админу отбивку, что пост опубликован
+        # Отправляем админу отбивку, что пост опубликован + очищаем клавиатуру (предложенные наборы эмодзи)
         bot.send_message(admin_id,
                          t("app.bot.admin.poll_posted"),
-                         reply_to_message_id=suggestion.admin_message_id)
+                         reply_to_message_id=suggestion.admin_message_id,
+                         reply_markup=ReplyKeyboardRemove())
         # Обновляем предложку
         suggestion.decision = DECISION_ACCEPT_WITH_POLL
         suggestion.channel_post_id = channel_post.message_id
@@ -551,15 +554,27 @@ def call_on_admin_suggestion(call: CallbackQuery, session=None):
             if other_suggestion is None:
                 raise Exception("Suggestion not found")
             reset_suggestion(other_suggestion)
+            admin_id = get_admin_id()
+            # Отправляем сообщение о том, что предыдущая операция отменена + удаляем кнопки если есть
+            # TODO попробовать совместить с /cancel
+            bot.send_message(admin_id,
+                             t("app.bot.admin.previous_action_canceled"),
+                             reply_to_message_id=other_suggestion.admin_message_id,
+                             reply_markup=ReplyKeyboardRemove())
         repo.set_admin_state(AdminState.STATE_WAIT_BUTTONS, {"suggestion_id": suggestion.id})
         # Показываем плашку о том, что решение принято
         answer_callback_decision(call, DECISION_ACCEPT_WITH_POLL)
         # Удаляем кнопки
         rerender_suggestion(suggestion)
         # Отправляем сообщение о том, что ждем эмодзи
+        suggested_emoji_set_markup = ReplyKeyboardMarkup()
+        previous_emoji_sets = repo.get_previous_emoji_sets()
+        for emoji_set in previous_emoji_sets:
+            suggested_emoji_set_markup.add(KeyboardButton(emoji_set))
         bot.send_message(call.message.chat.id,
                          t("app.bot.admin.wait_buttons"),
-                         reply_to_message_id=suggestion.admin_message_id)
+                         reply_to_message_id=suggestion.admin_message_id,
+                         reply_markup=suggested_emoji_set_markup if len(previous_emoji_sets) > 0 else None)
         suggestion.state = Suggestion.STATE_WAIT
         # TODO прикрепить к сообщению последние 5 вариантов (не присылать при этом дубли)
 
