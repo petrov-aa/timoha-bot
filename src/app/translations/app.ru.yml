@@ -1,0 +1,78 @@
+bot:
+  message:
+    start: |-
+      :waving_hand: Привет!
+
+      :information: С моей помощью ты можешь отправлять котов в канал
+      [%{channel_title}](tg://resolve?domain=%{channel_username}).
+
+      :clipboard: Пришли мне кота. Если админ одобрит кота, ты увидишь его в канале)
+  admin:
+    wait_buttons: >-
+      Отправьте одним сообщением набор эмодзи для кнопок или нажмите /cancel для отмены
+    poll_posted: >-
+      :white_heavy_check_mark: Пост с кнопками опубликован
+    cancel: Операция отменена
+    error:
+      poll:
+        emoji_restrictions: Можно добавить от 1 до 6 эмодзи
+      decision:
+        wrong_state: Произошла ошибка, повторите попытку позднее
+
+  user:
+    posted: |-
+      :white_heavy_check_mark: Спасибо, кот отправлен!
+    published: |-
+      :thumbs_up: Кот опубликован!
+      <a href="%{post_url}">:link: Ссылка на пост</a>
+    wrong_content: |-
+      :cross_mark: Принимаются только картинки
+  sign: >-
+    <i>прислали через</i>
+    <a href="tg://resolve?domain=%{bot_username}">%{bot_username}</a>
+
+admin:
+  suggestion:
+    head: >-
+      :envelope_with_arrow: <b>Прислали нового кота!</b> :envelope_with_arrow:
+    from:
+      url: >-
+        :bust_in_silhouette: От:
+        <a href="tg://user?id=%{user_id}">%{user_title}</a>
+    forwarded_from:
+      plain: >-
+        :right_arrow: Переслано от:
+        %{forwarded_user_title}
+      url: >-
+        :right_arrow: Переслано от:
+        <a href="tg://resolve?domain=%{forwarded_user_id}">%{forwarded_user_title}</a>
+    post_url: >-
+      <a href="%{url}">:link: Ссылка на пост</a>
+    button:
+      accept: Опубликовать
+      accept_with_poll: Опубликовать с кнопками
+      decline: Отклонить
+  decision:
+    accepted:
+      rich: >-
+        :white_heavy_check_mark: <b>Опубликовано</b>
+      plain: >-
+        :white_heavy_check_mark: Опубликовано
+    accepted_with_poll:
+      callback_answer: Введите эмодзи для кнопок
+      rich: >-
+        :white_heavy_check_mark: <b>Опубликовано с кнопками</b>
+      plain: >-
+        :white_heavy_check_mark: Опубликовано с кнопками
+    declined:
+      rich: >-
+        :cross_mark: <b>Отклонено</b>
+      plain: >-
+        :cross_mark: Отклонено
+
+poll:
+  vote:
+    error: Произошла ошибка, повторите попытку позднее
+    voted: Вы проголосовали - %{emoji}
+    canceled: Голос отменен - %{emoji}
+
