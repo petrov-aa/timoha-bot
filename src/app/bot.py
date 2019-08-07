@@ -576,6 +576,7 @@ def call_on_admin_suggestion(call: CallbackQuery, session=None):
                          t("app.bot.admin.wait_buttons"),
                          reply_to_message_id=suggestion.admin_message_id,
                          reply_markup=suggested_emoji_set_markup if len(previous_emoji_sets) > 0 else None)
+        # Устанавливаем состояние предложки в состояние ожидания
         suggestion.state = Suggestion.STATE_WAIT
 
 
