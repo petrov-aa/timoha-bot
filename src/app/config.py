@@ -46,3 +46,8 @@ APP_RUN_METHOD = os.environ[ENV_VAR_APP_RUN_METHOD]
 """
 Способ запуска бота: pooling или webhook
 """
+
+if ENV_VAR_LOG_FILENAME not in os.environ:
+    APP_LOG_FILENAME = "app.log"
+else:
+    APP_LOG_FILENAME = os.environ[ENV_VAR_LOG_FILENAME]

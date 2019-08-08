@@ -76,7 +76,7 @@ def get_admin_id():
     return chat.id
 
 
-def get_channel() -> TelebotChat:
+def get_channel():
     """
     Получить канал в который предлагаются посты
 

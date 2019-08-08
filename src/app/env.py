@@ -43,3 +43,8 @@ ENV_VAR_APP_RUN_METHOD = "APP_RUN_METHOD"
 """
 Способ запуска бота: pooling или webhook
 """
+
+ENV_VAR_LOG_FILENAME = "APP_LOG_FILENAME"
+"""
+Путь к файлу-логу
+"""

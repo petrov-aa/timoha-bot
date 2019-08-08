@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from app import config
+from app.logger import logger as app_logger
 
 
 __engine = create_engine(config.APP_DATABASE_URL, pool_pre_ping=True)
@@ -22,7 +23,8 @@ def get_flush_session():
     try:
         yield session
         session.flush()
-    except:
+    except Exception as e:
+        app_logger.error("Error during flush session: {}".format(str(e)))
         session.rollback()
         raise
 
@@ -49,6 +51,7 @@ def get_commit_session():
         yield session
         session.commit()
     except Exception as e:
+        app_logger.error("Error during commit session: {}".format(str(e)))
         session.rollback()
     finally:
         session.close()
