@@ -5,7 +5,7 @@ if [ ! -z $X_SECRET_FILE ]; then
 fi
 
 # Ждем старта mysql
-sleep 5
+sleep 10
 
 # Производим миграции
 alembic upgrade head
