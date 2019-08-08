@@ -331,7 +331,8 @@ def notify_user_about_publish(suggestion: Suggestion):
 
 
 @bot.message_handler(commands=["start", "help"])
-def send_help(message: TelebotMessage):
+@db.commit_session
+def send_help(message: TelebotMessage, session=None):
     """
     Отправка помощи. Отправляется на команды `\\\\start` и `\\\\help`
     """
@@ -470,7 +471,8 @@ def catch_photo(message: TelebotMessage, session=None):
 
 
 @bot.message_handler(func=lambda message: True, content_types=None)
-def catch_any_message(message: TelebotMessage):
+@db.commit_session
+def catch_any_message(message: TelebotMessage, session=None):
     """
     Сообщение на случай, если отправлен неподдерживаемый контент
 
