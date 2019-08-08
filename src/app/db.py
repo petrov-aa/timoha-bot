@@ -11,7 +11,9 @@ from app import config
 
 __engine = create_engine(config.APP_DATABASE_URL, pool_pre_ping=True)
 
-__Session = scoped_session(sessionmaker(bind=__engine))
+__SessionFactory = sessionmaker(bind=__engine)
+
+__Session = scoped_session(__SessionFactory)
 
 
 @contextmanager
