@@ -47,9 +47,7 @@ def get_commit_session():
         yield session
         session.commit()
     except Exception as e:
-        # TODO вернуть здесь rollback и подумать о логировании ошибок
-        raise e
-        # session.rollback()
+        session.rollback()
     finally:
         session.close()
         __Session.remove()
