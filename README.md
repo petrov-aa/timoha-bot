@@ -55,10 +55,14 @@ services:
     env_file:
       - .bot.env
     restart: always
+    depends_on:
+      - db
     links:
       - db
     environment:
       APP_RUN_METHOD: webhook
+    volumes:
+      - "./app.log:/app/app.log"
     ports:
       - "127.0.0.1:7000:443"
 ```
